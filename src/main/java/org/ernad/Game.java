@@ -15,10 +15,16 @@ import java.net.URL;
 import javax.swing.JFrame;
 import javax.imageio.ImageIO;
 
+
+/*
+* Main class
+*
+*
+*  */
 public class Game extends JFrame implements Runnable {
 
 
-    private static int alpha = 0xFFFF00DC;
+    private static int alpha = 0xFFFF00DC;  //Sprite background color that render translucent
 
     private Canvas canvas = new Canvas();
     private RenderHandler renderer;
