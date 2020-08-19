@@ -11,7 +11,6 @@ import java.io.IOException;
 
 import java.lang.Runnable;
 import java.lang.Thread;
-import java.net.URL;
 import javax.swing.JFrame;
 import javax.imageio.ImageIO;
 
@@ -54,13 +53,14 @@ public class Game extends JFrame implements Runnable {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //Set windows size
-        setBounds(0,0,1280,720);
-
-        //Put our window in the center of the screen.
-        setLocationRelativeTo(null);
+        this.canvas.setBounds(0, 0, 1280, 720);
 
         //Add our graphics component
         add(this.canvas);
+        pack();
+
+        //Put our window in the center of the screen.
+        setLocationRelativeTo(null);
 
         //Make out window visible.
         setVisible(true);
@@ -68,12 +68,12 @@ public class Game extends JFrame implements Runnable {
         //Create our object for buffer strategy.
         this.canvas.createBufferStrategy(3);
 
+        pack();
+
         //Creating the renderer
-        this.renderer = new RenderHandler(getWidth(), getHeight());
+        this.renderer = new RenderHandler(this.canvas.getWidth(), this.canvas.getHeight());
 
         //Loading resources
-        //testImage = loadImage("/GrassTile.png");
-
         BufferedImage sheetImage = loadImage("/Tiles1.png");
         this.sheet = new SpriteSheet(sheetImage);
         this.sheet.loadSprites(16, 16);
