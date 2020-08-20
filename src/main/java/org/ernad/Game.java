@@ -14,7 +14,6 @@ import java.lang.Thread;
 import javax.swing.JFrame;
 import javax.imageio.ImageIO;
 
-
 /*
 * Main class
 *
@@ -22,8 +21,7 @@ import javax.imageio.ImageIO;
 *  */
 public class Game extends JFrame implements Runnable {
 
-
-    private static int alpha = 0xFFFF00DC;  //Sprite background color that render translucent
+    private static int alpha = 0xFFFF00DC; // Sprite background color that render translucent
 
     private Canvas canvas = new Canvas();
     private RenderHandler renderer;
@@ -49,31 +47,31 @@ public class Game extends JFrame implements Runnable {
 
     public Game() {
 
-        //When windows closes the program ends
+        // When windows closes the program ends
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        //Set windows size
+        // Set windows size
         this.canvas.setBounds(0, 0, 1280, 720);
 
-        //Add our graphics component
+        // Add our graphics component
         add(this.canvas);
         pack();
 
-        //Put our window in the center of the screen.
+        // Put our window in the center of the screen.
         setLocationRelativeTo(null);
 
-        //Make out window visible.
+        // Make out window visible.
         setVisible(true);
 
-        //Create our object for buffer strategy.
+        // Create our object for buffer strategy.
         this.canvas.createBufferStrategy(3);
 
         pack();
 
-        //Creating the renderer
+        // Creating the renderer
         this.renderer = new RenderHandler(this.canvas.getWidth(), this.canvas.getHeight());
 
-        //Loading resources
+        // Loading resources
         BufferedImage sheetImage = loadImage("/Tiles1.png");
         this.sheet = new SpriteSheet(sheetImage);
         this.sheet.loadSprites(16, 16);
@@ -81,42 +79,40 @@ public class Game extends JFrame implements Runnable {
         BufferedImage playerSheetImage = loadImage("/Player.png");
         this.playerSheet = new SpriteSheet(playerSheetImage);
         this.playerSheet.loadSprites(20, 26);
-        //Player animated sprites
-        AnimatedSprite playerSprite = new AnimatedSprite(this.playerSheet,5);
+        // Player animated sprites
+        AnimatedSprite playerSprite = new AnimatedSprite(this.playerSheet, 5);
 
+        // Load tiles
+        this.tiles = new Tiles(new File("D:\\Workspace\\Java\\Java2DGame\\src\\main\\resources\\Tiles.txt"), sheet);
+        // Load map
+        this.map = new Map(new File("D:\\Workspace\\Java\\Java2DGame\\src\\main\\resources\\Map.txt"), tiles);
 
-        //Load tiles
-        this.tiles = new Tiles(new File("C:\\Users\\Ernad Sehic\\IdeaProjects\\JavaGame\\src\\main\\resources\\Tiles.txt"), sheet);
-        //Load map
-        this.map = new Map(new File("C:\\Users\\Ernad Sehic\\IdeaProjects\\JavaGame\\src\\main\\resources\\Map.txt"), tiles);
+        this.testRectangle.generateGraphics(5, 12222);
 
-        this.testRectangle.generateGraphics(5,12222);
-
-        //Load SDK GUI
+        // Load SDK GUI
         GUIButton[] buttons = new GUIButton[this.tiles.size()];
         Sprite[] tileSprites = this.tiles.getSprites();
 
-        for(int i = 0; i < buttons.length; i++) {
-            Rectangle tileRectangle = new Rectangle(0, i*(16*xZoom + 2), 16 * this.xZoom, 16 * this.yZoom);
+        for (int i = 0; i < buttons.length; i++) {
+            Rectangle tileRectangle = new Rectangle(0, i * (16 * xZoom + 2), 16 * this.xZoom, 16 * this.yZoom);
 
-            buttons[i] = new SDKButton(this, i,tileSprites[i], tileRectangle);
+            buttons[i] = new SDKButton(this, i, tileSprites[i], tileRectangle);
         }
 
         GUI gui = new GUI(buttons, 5, 5, true);
 
-
-        //Load Objects
+        // Load Objects
         this.objects = new GameObject[2];
         this.player = new Player(playerSprite);
         this.objects[0] = this.player;
         this.objects[1] = gui;
 
-        //Add Listeners
+        // Add Listeners
         canvas.addKeyListener(this.keyListener);
         canvas.addFocusListener(this.keyListener);
         canvas.addMouseListener(this.mouseListener);
         canvas.addMouseMotionListener(this.mouseListener);
-        
+
     }
 
     public void render() {
@@ -126,12 +122,11 @@ public class Game extends JFrame implements Runnable {
 
         this.map.render(this.renderer, this.xZoom, this.yZoom);
 
-        for(int i = 0; i < this.objects.length; i++) {
+        for (int i = 0; i < this.objects.length; i++) {
             this.objects[i].render(this.renderer, this.xZoom, this.yZoom);
         }
 
-
-        //Put the rendered stuff on screen
+        // Put the rendered stuff on screen
         this.renderer.render(graphics);
 
         graphics.dispose();
@@ -149,25 +144,25 @@ public class Game extends JFrame implements Runnable {
 
     public void update() {
 
-        for(int i = 0; i < this.objects.length; i++) {
+        for (int i = 0; i < this.objects.length; i++) {
             this.objects[i].update(this);
         }
 
     }
 
-    //Handles time, currently set at 60FPS
+    // Handles time, currently set at 60FPS
     public void run() {
 
         long lastTime = System.nanoTime();
         double nanoSecondConversion = 1000000000.0 / 60;
         double changeInSeconds = 0;
 
-        while(true) {
+        while (true) {
             long now = System.nanoTime();
 
             changeInSeconds += (now - lastTime) / nanoSecondConversion;
 
-            while(changeInSeconds >= 1) {
+            while (changeInSeconds >= 1) {
                 update();
                 changeInSeconds--;
             }
@@ -177,11 +172,12 @@ public class Game extends JFrame implements Runnable {
         }
     }
 
-    //IO Stream handling
+    // IO Stream handling
     private BufferedImage loadImage(String path) {
         try {
             BufferedImage loadedImage = ImageIO.read(Game.class.getResource(path));
-            BufferedImage formattedImage = new BufferedImage(loadedImage.getWidth(), loadedImage.getHeight(), BufferedImage.TYPE_INT_RGB);
+            BufferedImage formattedImage = new BufferedImage(loadedImage.getWidth(), loadedImage.getHeight(),
+                    BufferedImage.TYPE_INT_RGB);
             formattedImage.getGraphics().drawImage(loadedImage, 0, 0, null);
 
             return formattedImage;
@@ -195,13 +191,14 @@ public class Game extends JFrame implements Runnable {
         Rectangle mouseRectangle = new Rectangle(x, y, 1, 1);
         boolean stoppedChecking = false;
 
-        for(int i = 0; i < this.objects.length; i++) {
-            if(!stoppedChecking) {
-                stoppedChecking = this.objects[i].handleMouseClick(mouseRectangle, this.renderer.getCamera(), this.xZoom, this.yZoom);
+        for (int i = 0; i < this.objects.length; i++) {
+            if (!stoppedChecking) {
+                stoppedChecking = this.objects[i].handleMouseClick(mouseRectangle, this.renderer.getCamera(),
+                        this.xZoom, this.yZoom);
             }
         }
 
-        if(!stoppedChecking) {
+        if (!stoppedChecking) {
             x = (int) Math.floor((x + this.renderer.getCamera().x) / (16.0 * this.xZoom));
             y = (int) Math.floor((y + this.renderer.getCamera().y) / (16.0 * this.yZoom));
             this.map.setTile(x, y, this.selectedTileID);
@@ -216,7 +213,7 @@ public class Game extends JFrame implements Runnable {
     }
 
     public void handleCTRL(boolean[] keys) {
-        if(keys[KeyEvent.VK_S]) {
+        if (keys[KeyEvent.VK_S]) {
             this.map.saveMap();
         }
     }
@@ -225,13 +222,19 @@ public class Game extends JFrame implements Runnable {
         return alpha;
     }
 
-    public KeyboardListener getKeyListener() { return this.keyListener; }
+    public KeyboardListener getKeyListener() {
+        return this.keyListener;
+    }
 
-    public RenderHandler getRenderer() { return this.renderer; }
+    public RenderHandler getRenderer() {
+        return this.renderer;
+    }
 
-    public MouseEventListener getMouseListener() { return this.mouseListener; }
+    public MouseEventListener getMouseListener() {
+        return this.mouseListener;
+    }
 
-    public static void main(String[] args ) {
+    public static void main(String[] args) {
         Game game = new Game();
         Thread gameThread = new Thread(game);
         gameThread.start();

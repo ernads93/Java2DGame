@@ -12,23 +12,21 @@ public abstract class GUIButton implements GameObject {
         this.fixed = fixed;
     }
 
-    @Override
     public void render(RenderHandler renderer, int xZoom, int yZoom) {
 
     }
 
     public void render(RenderHandler renderer, int xZoom, int yZoom, Rectangle interfaceRect) {
-        renderer.renderSprite(this.sprite, this.rect.x + interfaceRect.x, this.rect.y + interfaceRect.y, xZoom, yZoom, this.fixed);
+        renderer.renderSprite(this.sprite, this.rect.x + interfaceRect.x, this.rect.y + interfaceRect.y, xZoom, yZoom,
+                this.fixed);
     }
 
-    @Override
     public void update(Game game) {
 
     }
 
-    @Override
     public boolean handleMouseClick(Rectangle mouseRectangle, Rectangle camera, int xZoom, int yZoom) {
-        if(mouseRectangle.intersects(this.rect)) {
+        if (mouseRectangle.intersects(this.rect)) {
             activate();
             return true;
         }

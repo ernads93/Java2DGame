@@ -9,7 +9,7 @@ public class AnimatedSprite extends Sprite implements GameObject {
     private int speed;
     private int counter = 0;
 
-    private int startSprite =0;
+    private int startSprite = 0;
     private int endSprite;
 
     public AnimatedSprite(SpriteSheet sheet, Rectangle[] positions, int speed) {
@@ -18,8 +18,9 @@ public class AnimatedSprite extends Sprite implements GameObject {
         this.speed = speed;
         this.endSprite = positions.length - 1;
 
-        for(int i = 0; i < positions.length; i++) {
-            this.sprites[i] = new Sprite(sheet, positions[i].x, positions[i].y, positions[i].getWidth(), positions[i].getHeight());
+        for (int i = 0; i < positions.length; i++) {
+            this.sprites[i] = new Sprite(sheet, positions[i].x, positions[i].y, positions[i].getWidth(),
+                    positions[i].getHeight());
         }
     }
 
@@ -36,7 +37,7 @@ public class AnimatedSprite extends Sprite implements GameObject {
         this.speed = speed;
         this.endSprite = images.length - 1;
 
-        for(int i = 0; i < images.length; i++) {
+        for (int i = 0; i < images.length; i++) {
             this.sprites[i] = new Sprite(images[i]);
         }
     }
@@ -52,13 +53,12 @@ public class AnimatedSprite extends Sprite implements GameObject {
         this.currentSprite = this.startSprite;
     }
 
-    @Override
-    public void render(RenderHandler renderer, int xZoom, int yZoom) { }
+    public void render(RenderHandler renderer, int xZoom, int yZoom) {
+    }
 
-    @Override
     public void update(Game game) {
         this.counter++;
-        if(this.counter >= this.speed) {
+        if (this.counter >= this.speed) {
             this.counter = 0;
             incrementSprite();
         }
@@ -66,17 +66,16 @@ public class AnimatedSprite extends Sprite implements GameObject {
 
     public void incrementSprite() {
         this.currentSprite++;
-        if(this.currentSprite >= this.endSprite) {
+        if (this.currentSprite >= this.endSprite) {
             this.currentSprite = this.startSprite;
         }
     }
 
-    @Override
     public boolean handleMouseClick(Rectangle mouseRectangle, Rectangle camera, int xZoom, int yZoom) {
         return false;
     }
 
-    //Getters and setters below this line
+    // Getters and setters below this line
     public int getWidth() {
         return this.sprites[this.currentSprite].getWidth();
     }

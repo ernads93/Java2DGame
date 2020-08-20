@@ -21,25 +21,24 @@ public class Map {
         try {
             Scanner scanner = new Scanner(mapFile);
             int currentLine = 0;
-            while(scanner.hasNextLine()) {
+            while (scanner.hasNextLine()) {
 
                 String line = scanner.nextLine();
 
-                if(!line.startsWith("//")) {
+                if (!line.startsWith("//")) {
 
-                    if(line.contains(":")) {
+                    if (line.contains(":")) {
                         String[] splitString = line.split(":");
-                        if(splitString[0].equalsIgnoreCase("Fill")) {
+                        if (splitString[0].equalsIgnoreCase("Fill")) {
                             fillTileID = Integer.parseInt(splitString[1]);
                             continue;
                         }
                     }
 
                     String[] splitString = line.split(",");
-                    if(splitString.length >= 3) {
+                    if (splitString.length >= 3) {
                         MappedTile mappedTile = new MappedTile(Integer.parseInt(splitString[0]),
-                                                               Integer.parseInt(splitString[1]),
-                                                               Integer.parseInt(splitString[2]));
+                                Integer.parseInt(splitString[1]), Integer.parseInt(splitString[2]));
                         mappedTiles.add(mappedTile);
                     }
                 } else {
@@ -49,7 +48,8 @@ public class Map {
             }
 
         } catch (FileNotFoundException e) {
-            e.printStackTrace();;
+            e.printStackTrace();
+            ;
         }
     }
 
@@ -57,33 +57,36 @@ public class Map {
         int tileWidth = 16 * xZoom;
         int tileHeight = 16 * yZoom;
 
-        if(this.fillTileID >= 0) {
+        if (this.fillTileID >= 0) {
             Rectangle camera = renderer.getCamera();
-            for(int y = camera.y - tileHeight - (camera.y % tileHeight); y < camera.y + camera.getHeight(); y += tileHeight) {
-                for(int x = camera.x - tileWidth - (camera.x % tileWidth); x < camera.x + camera.getWidth(); x += tileWidth) {
+            for (int y = camera.y - tileHeight - (camera.y % tileHeight); y < camera.y
+                    + camera.getHeight(); y += tileHeight) {
+                for (int x = camera.x - tileWidth - (camera.x % tileWidth); x < camera.x
+                        + camera.getWidth(); x += tileWidth) {
                     this.tileSet.renderTile(this.fillTileID, renderer, x, y, xZoom, yZoom);
                 }
             }
         }
 
-        for(int tileIndex = 0; tileIndex < this.mappedTiles.size(); tileIndex++) {
+        for (int tileIndex = 0; tileIndex < this.mappedTiles.size(); tileIndex++) {
             MappedTile mappedTile = this.mappedTiles.get(tileIndex);
-            this.tileSet.renderTile(mappedTile.getId(), renderer, mappedTile.getX() * tileWidth, mappedTile.getY() * tileHeight, xZoom, yZoom);
+            this.tileSet.renderTile(mappedTile.getId(), renderer, mappedTile.getX() * tileWidth,
+                    mappedTile.getY() * tileHeight, xZoom, yZoom);
         }
     }
 
     public void setTile(int tileX, int tileY, int tileID) {
         boolean foundTile = false;
 
-        for(int i = 0; i < this.mappedTiles.size(); i++) {
+        for (int i = 0; i < this.mappedTiles.size(); i++) {
             MappedTile mappedTile = this.mappedTiles.get(i);
-            if(mappedTile.x == tileX && mappedTile.y == tileY) {
+            if (mappedTile.x == tileX && mappedTile.y == tileY) {
                 mappedTile.id = tileID;
                 foundTile = true;
                 break;
             }
         }
-        if(!foundTile) {
+        if (!foundTile) {
             this.mappedTiles.add(new MappedTile(tileID, tileX, tileY));
         }
     }
@@ -91,7 +94,7 @@ public class Map {
     public void saveMap() {
         try {
             int currentLine = 0;
-            if(this.mapFile.exists()) {
+            if (this.mapFile.exists()) {
                 this.mapFile.delete();
             }
 
@@ -99,16 +102,16 @@ public class Map {
 
             PrintWriter printWriter = new PrintWriter(this.mapFile);
 
-            if(this.fillTileID >= 0) {
-                if(this.comments.containsKey(currentLine)) {
+            if (this.fillTileID >= 0) {
+                if (this.comments.containsKey(currentLine)) {
                     printWriter.println(this.comments.get(currentLine));
                     currentLine++;
                 }
                 printWriter.println("Fill:" + this.fillTileID);
             }
 
-            for(int i = 0; i < this.mappedTiles.size(); i++) {
-                if(this.comments.containsKey(currentLine)) {
+            for (int i = 0; i < this.mappedTiles.size(); i++) {
+                if (this.comments.containsKey(currentLine)) {
                     printWriter.println(this.comments.get(currentLine));
                 }
 
@@ -118,22 +121,21 @@ public class Map {
             }
             printWriter.close();
 
-
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     public void removeTile(int tileX, int tileY) {
-        for(int i = 0; i < this.mappedTiles.size(); i++) {
+        for (int i = 0; i < this.mappedTiles.size(); i++) {
             MappedTile mappedTile = mappedTiles.get(i);
-            if(mappedTile.x == tileX && mappedTile.y == tileY) {
+            if (mappedTile.x == tileX && mappedTile.y == tileY) {
                 this.mappedTiles.remove(i);
             }
         }
     }
 
-    //Struct - Tile ID in the TileSet and the position of the tile on the map)
+    // Struct - Tile ID in the TileSet and the position of the tile on the map)
     class MappedTile {
 
         private int id;
@@ -146,7 +148,7 @@ public class Map {
             this.y = y;
         }
 
-        //Getters and setters below this line
+        // Getters and setters below this line
         public int getId() {
             return id;
         }
@@ -159,6 +161,5 @@ public class Map {
             return y;
         }
     }
-
 
 }

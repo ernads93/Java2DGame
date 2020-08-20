@@ -1,20 +1,18 @@
 package org.ernad;
 
-import java.awt.*;
-
-public class Player implements GameObject{
+public class Player implements GameObject {
 
     private Rectangle playerRectangle;
     private int speed = 10;
     private Sprite sprite;
     private AnimatedSprite animatedSprite = null;
 
-    //0 = RIGHT, 1 = LEFT, 2 = UP, 3 = DOWN
+    // 0 = RIGHT, 1 = LEFT, 2 = UP, 3 = DOWN
     private int playerDirection = 0;
 
     public Player(Sprite sprite) {
         this.sprite = sprite;
-        if(sprite instanceof AnimatedSprite) {
+        if (sprite instanceof AnimatedSprite) {
             this.animatedSprite = (AnimatedSprite) sprite;
         }
 
@@ -25,67 +23,65 @@ public class Player implements GameObject{
     }
 
     private void updateDirection() {
-        if(this.animatedSprite != null) {
+        if (this.animatedSprite != null) {
             this.animatedSprite.setAnimationRange(this.playerDirection * 8, this.playerDirection * 8 + 7);
         }
     }
 
-    @Override
     public void render(RenderHandler renderer, int xZoom, int yZoom) {
-        if(this.animatedSprite != null) {
-            renderer.renderSprite(this.animatedSprite, this.playerRectangle.x, this.playerRectangle.y, xZoom, yZoom, false);
-        } else if(this.sprite != null){
+        if (this.animatedSprite != null) {
+            renderer.renderSprite(this.animatedSprite, this.playerRectangle.x, this.playerRectangle.y, xZoom, yZoom,
+                    false);
+        } else if (this.sprite != null) {
             renderer.renderSprite(this.sprite, this.playerRectangle.x, this.playerRectangle.y, xZoom, yZoom, false);
         } else {
             renderer.renderRectangle(this.playerRectangle, xZoom, yZoom, false);
         }
     }
 
-    @Override
     public void update(Game game) {
         KeyboardListener keyListener = game.getKeyListener();
 
         boolean moving = false;
         int newDirection = this.playerDirection;
 
-        if(keyListener.up()) {
+        if (keyListener.up()) {
             newDirection = 2;
             moving = true;
             this.playerRectangle.y -= this.speed;
         }
-        if(keyListener.down()) {
+        if (keyListener.down()) {
             newDirection = 3;
             moving = true;
             this.playerRectangle.y += this.speed;
         }
-        if(keyListener.left()) {
+        if (keyListener.left()) {
             newDirection = 1;
             moving = true;
             this.playerRectangle.x -= this.speed;
         }
-        if(keyListener.right()) {
+        if (keyListener.right()) {
             newDirection = 0;
             moving = true;
             this.playerRectangle.x += this.speed;
         }
 
-        if(newDirection != this.playerDirection) {
+        if (newDirection != this.playerDirection) {
             this.playerDirection = newDirection;
             updateDirection();
         }
 
-        if(!moving) {
+        if (!moving) {
             this.animatedSprite.reset();
         }
 
         updateCamera(game.getRenderer().getCamera());
-        if(moving) {
+        if (moving) {
             this.animatedSprite.update(game);
         }
 
     }
 
-    @Override
     public boolean handleMouseClick(Rectangle mouseRectangle, Rectangle camera, int xZoom, int yZoom) {
         return false;
     }

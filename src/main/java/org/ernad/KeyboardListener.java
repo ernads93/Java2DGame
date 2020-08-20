@@ -14,11 +14,10 @@ public class KeyboardListener implements KeyListener, FocusListener {
         this.game = game;
     }
 
-    @Override
     public void keyPressed(KeyEvent e) {
         int keyCode = e.getKeyCode();
 
-        if(keyCode < this.keys.length) {
+        if (keyCode < this.keys.length) {
             this.keys[keyCode] = true;
         }
 
@@ -27,18 +26,16 @@ public class KeyboardListener implements KeyListener, FocusListener {
         }
     }
 
-    @Override
     public void keyReleased(KeyEvent e) {
         int keyCode = e.getKeyCode();
 
-        if(keyCode < this.keys.length) {
+        if (keyCode < this.keys.length) {
             this.keys[keyCode] = false;
         }
     }
 
-    @Override
     public void focusLost(FocusEvent e) {
-        for(int i = 0; i < this.keys.length; i++) {
+        for (int i = 0; i < this.keys.length; i++) {
             this.keys[i] = false;
         }
     }
@@ -59,10 +56,10 @@ public class KeyboardListener implements KeyListener, FocusListener {
         return this.keys[KeyEvent.VK_D] || this.keys[KeyEvent.VK_RIGHT];
     }
 
-    @Override
-    public void keyTyped(KeyEvent e) { }
+    public void keyTyped(KeyEvent e) {
+    }
 
-    @Override
-    public void focusGained(FocusEvent e) { }
+    public void focusGained(FocusEvent e) {
+    }
 
 }
