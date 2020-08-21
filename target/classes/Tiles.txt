@@ -7,3 +7,4 @@ PathCorner,1,2
 PathHorizontal,2,2
 Water,4,3
 Water2,4,4
+Bure,4,2
